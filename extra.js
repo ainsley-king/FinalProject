@@ -1,6 +1,13 @@
-var kleb = drugs.filter(function(drugs)
+ var stack = d3.stack()
+    .keys(["PercentResistant","PercentIntermediate","PercentSensitive"]);
+ 
+var kleb = function(drugs)
+{
+    console.log(drugs)
+    
+    return drugs.filter(function(drugs)
             {
-                if(drugs.Bacteria == "Klebsiella pneumoniae")
+                if((drugs.Bacteria == "Klebsiella pneumoniae") && (drugs.Year == year))
                     {
                         return true;
                     }
@@ -9,27 +16,6 @@ var kleb = drugs.filter(function(drugs)
                         return false;
                     }
             })
-
-var esch = drugs.filter(function(drugs)
-            {
-                if(drugs.Bacteria == "Escherichia coli")
-                    {
-                        return true;
-                    }
-                else
-                    {
-                        return false;
-                    }
-            })
-
-var prot = drugs.filter(function(drugs)
-            {
-                if(drugs.Bacteria == "Proteus mirabilis")
-                    {
-                        return true;
-                    }
-                else
-                    {
-                        return false;
-                    }
-            })
+}
+    
+var series1 = stack(kleb(drugs))

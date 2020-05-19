@@ -41,6 +41,15 @@ var initAxes = function(lengths,target)
         .attr("transform","translate(0,"
              +(lengths.graph.height)+")")
     
+    var x3 = d3.select(target)
+        .select(".graph3")
+        .append("g")
+        .classed("class","axis")
+    
+    x3.append("g")
+        .attr("id","xAxis3")
+        .attr("transform","translate(0,"
+             +(lengths.graph.height)+")")
 }
 
 var updateAxes = function(target,xScale,yScale)
@@ -48,7 +57,6 @@ var updateAxes = function(target,xScale,yScale)
     
     var xAxis = d3.axisBottom(xScale);
     var yAxis = d3.axisLeft(yScale); 
-    var xAxis2 = d3.axisBottom(xScale);
     
     d3.select("#xAxis")
         .transition()
@@ -61,6 +69,11 @@ var updateAxes = function(target,xScale,yScale)
         .call(yAxis)
     
     d3.select("#xAxis2")
+        .transition()
+        .duration(dur)
+        .call(xAxis)
+    
+     d3.select("#xAxis3")
         .transition()
         .duration(dur)
         .call(xAxis)
@@ -151,12 +164,11 @@ var initGraph = function(target,drugs,year)
     var g3 = d3.select(target)
         .append("g")
         .classed("graph3",true)
-        .attr("transform","translate(1140,"+
+        .attr("transform","translate(1100,"+
              margins.top+")");
     
-    
-    updateGraph(drugs,target,lengths,year);
     initAxes(lengths,target);
+    updateGraph(drugs,target,lengths,year);
          
 };
     
@@ -192,7 +204,7 @@ var updateGraph = function(drugs,target,lengths,year)
         .paddingInner(.2);
     
     var yScale = d3.scaleLinear()
-        .domain([0,40000])
+        .domain([0,100])
         .range([lengths.graph.height,0]);
     
     
@@ -209,7 +221,7 @@ var updateGraph = function(drugs,target,lengths,year)
 //Klebsiella data
     
 var stack = d3.stack()
-    .keys(["NumberResistant","NumberIntermediate","NumberSensitive"]);
+    .keys(["PercentResistant","PercentIntermediate","PercentSensitive"]);
  
 var kleb = function(drugs)
 {
@@ -260,12 +272,12 @@ var rectangles = d3.select(target)
         })
         .attr("y",function(entry)
               {
-            return yScale(entry.NumberResistant);    
+            return yScale(entry.PercentResistant);    
         })
         .attr("width",70)
         .attr("height",function(drugs) 
         { 
-            return lengths.graph.height - (yScale(drugs.NumberResistant));
+            return lengths.graph.height - (yScale(drugs.PercentResistant));
         })
         .attr("rx",2)
         .attr("ry",2)
@@ -311,12 +323,12 @@ var rectangles = d3.select(target)
         })
         .attr("y",function(entry)
               {
-            return yScale(entry.NumberResistant);    
+            return yScale(entry.PercentResistant);    
         })
         .attr("width",70)
         .attr("height",function(drugs) 
         { 
-            return lengths.graph.height - (yScale(drugs.NumberResistant));
+            return lengths.graph.height - (yScale(drugs.PercentResistant));
         })
         .attr("rx",2)
         .attr("ry",2)
@@ -362,12 +374,12 @@ var rectangles = d3.select(target)
         })
         .attr("y",function(entry)
               {
-            return yScale(entry.NumberResistant);    
+            return yScale(entry.PercentResistant);    
         })
         .attr("width",70)
         .attr("height",function(drugs) 
         { 
-            return lengths.graph.height - (yScale(drugs.NumberResistant));
+            return lengths.graph.height - (yScale(drugs.PercentResistant));
         })
         .attr("rx",2)
         .attr("ry",2)
@@ -396,7 +408,7 @@ var createLabels = function(target,lengths,drugs,year)
         .attr("transform","translate(20,"+ 
               (lengths.margins.top+(lengths.graph.height/2))+")")
         .append("text")
-        .text("Number of Cases")
+        .text("Percent")
         .classed("label",true)
         .attr("text-anchor","middle")
         .attr("transform","rotate(90)")

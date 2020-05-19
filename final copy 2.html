@@ -88,34 +88,34 @@ var initButtons = function(target,drugs,lengths,year)
     .on("click",function()
     {
         
-        updateGraph(drugs,target,lengths,2014);
+        updateGraph(drugs,target,lengths,2014,groupsK,groupsE,groupsP);
     })
     
     d3.select("#five")
     .on("click",function()
     {
         
-        updateGraph(drugs,target,lengths,2015);
+        updateGraph(drugs,target,lengths,2015,groupsK,groupsE,groupsP);
     })
     
     d3.select("#six")
     .on("click",function()
     {
-         updateGraph(drugs,target,lengths,2016);
+         updateGraph(drugs,target,lengths,2016,groupsK,groupsE,groupsP);
         
     })
     
     d3.select("#seven")
     .on("click",function()
     {
-         updateGraph(drugs,target,lengths,2017);
+         updateGraph(drugs,target,lengths,2017,groupsK,groupsE,groupsP);
         
     })
     
     d3.select("#eight")
     .on("click",function()
     {
-         updateGraph(drugs,target,lengths,2018);
+         updateGraph(drugs,target,lengths,2018,groupsK,groupsE,groupsP);
         
     })
     
@@ -142,40 +142,236 @@ var initGraph = function(target,drugs,year)
         margins:margins,
         graph:graph
     }
+    
+    //Create scales
+    var xScale = d3.scaleBand()
+        .domain(drugs.map(function(entry)
+                {return entry.Antibiotic;}))
+        .range([0,lengths.graph.width])
+        .paddingInner(.2);
+    
+    var yScale = d3.scaleLinear()
+        .domain([0,100])
+        .range([lengths.graph.height,0]);
+    
+    var colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+    
+    
+    //create groups for the three different whole graphs to go into
+    var g1 = d3.select(target)
+        .append("g")
+        .classed("graph1",true)
+    
+    var g2 = d3.select(target)
+        .append("g")
+        .classed("graph2",true)
+    
+    var g1 = d3.select(target)
+        .append("g")
+        .classed("graph3",true)
 
+    
+    
+    
+    //Create groups for each stack level, put inside the groups above
+    
+    
+//Klebsiella data
+
+//stacking
+var stack = d3.stack()
+    .keys(["PercentResistant","PercentIntermediate","PercentSensitive"]);
+ 
+var kleb = function(drugs)
+{
+    console.log(drugs)
+    
+    return drugs.filter(function(drugs)
+            {
+                if((drugs.Bacteria == "Klebsiella pneumoniae") && (drugs.Year == year))
+                    {
+                        return true;
+                    }
+                else
+                    {
+                        return false;
+                    }
+            })
+}
+    
+var series1 = stack(kleb(drugs))
+
+console.log(series1)
+    
     //set the screen size
     d3.select(target)
         .attr("width",screen.width)
         .attr("height",screen.height)
     
-    //create a group for the graph
-    var g1 = d3.select(target)
-        .append("g")
-        .classed("graph1",true)
+    //create groups for each layer
+    //Join
+    var groupsK = d3.select(target)
+        .select(".graph1")
+        .selectAll("g")
+        .data(series1)
+    
+    //enter
+    groupsK.enter()
+        .append("g");
+        
+     //exit
+     groupsK.exit()
+        .remove();
+            
+     //Update
+    //reselect
+    d3.select(target) 
+        .select(".graph1")
+        .selectAll("g")
+        .transition()
+        .duration(dur)
+        .classed("graph1layers",true)
         .attr("transform","translate("+margins.left+","+
              margins.top+")");
     
-    var g2 = d3.select(target)
-        .append("g")
-        .classed("graph2",true)
+    
+    
+
+    
+    
+//E. coli data
+    
+var Estack = d3.stack()
+    .keys(["PercentResistant","PercentIntermediate","PercentSensitive"]);
+ 
+var coli = function(drugs)
+{
+    console.log(drugs)
+    
+    return drugs.filter(function(drugs)
+            {
+                if((drugs.Bacteria == "Escherichia coli") && (drugs.Year == year))
+                    {
+                        return true;
+                    }
+                else
+                    {
+                        return false;
+                    }
+            })
+}
+    
+var series2 = stack(coli(drugs))
+
+console.log(series2)
+    
+    //set the screen size
+    d3.select(target)
+        .attr("width",screen.width)
+        .attr("height",screen.height)
+    
+    //create groups for the graph
+    //Join
+    var groupsE = d3.select(target)
+        .select(".graph2")
+        .selectAll("g")
+        .data(series2)
+    
+    //enter
+    groupsE.enter()
+        .append("g");
+        
+     //exit
+     groupsE.exit()
+        .remove();
+            
+     //Update
+    //reselect
+    d3.select(target)
+        .select(".graph2")
+        .selectAll("g")
+        .transition()
+        .duration(dur)
+        .classed("graph2layers",true)
         .attr("transform","translate(600,"+
              margins.top+")");
     
-    var g3 = d3.select(target)
-        .append("g")
-        .classed("graph3",true)
-        .attr("transform","translate(1100,"+
-             margins.top+")");
+   
     
-    initAxes(lengths,target);
+    
+    
+    
+    
+    
+//Proteus data
+    
+ var Pstack = d3.stack()
+    .keys(["PercentResistant","PercentIntermediate","PercentSensitive"]);
+ 
+var proteus = function(drugs)
+{
+    console.log(drugs)
+    
+    return drugs.filter(function(drugs)
+            {
+                if((drugs.Bacteria == "Proteus mirabilis") && (drugs.Year == year))
+                    {
+                        return true;
+                    }
+                else
+                    {
+                        return false;
+                    }
+            })
+}
+    
+var series3 = stack(proteus(drugs))
+
+console.log(series3)
+    
+    //set the screen size
+    d3.select(target)
+        .attr("width",screen.width)
+        .attr("height",screen.height)
+    
+    //create groups for the graph
+    //Join
+    var groupsP = d3.select(target)
+        .select(".graph3")
+        .selectAll("g")
+        .data(series3)
+    
+    //enter
+    groupsP.enter()
+        .append("g");
+        
+     //exit
+     groupsP.exit()
+        .remove();
+            
+     //Update
+    //reselect
+    d3.select(target) 
+        .select(".graph3")
+        .selectAll("g")
+        .transition()
+        .duration(dur)
+        .classed("graph3layers",true)
+        .attr("transform","translate(1100,"+
+             margins.top+")");   
+    
+
+    
+    initAxes(lengths,target,xScale,yScale);
     createLabels(target,lengths,drugs,year);
-    updateGraph(drugs,target,lengths,year);
-         
-};
+    initButtons(target,drugs,lengths,year);
+    updateGraph(drugs,target,lengths,year,groups);
+
+    };
     
      
 
-var updateGraph = function(drugs,target,lengths,year)
+var updateGraph = function(drugs,target,lengths,year,groupsK,groupsE,groupsP)
 {
     
     //the size of the screen
@@ -217,168 +413,134 @@ var updateGraph = function(drugs,target,lengths,year)
     
     initButtons(target,drugs,lengths,year);
     
+    
+    
+    
+    
+    
 //Klebsiella data
     
-var stack = d3.stack()
-    .keys(["PercentResistant","PercentIntermediate","PercentSensitive"]);
- 
-var kleb = function(drugs)
-{
-    console.log(drugs)
-    
-    return drugs.filter(function(drugs)
-            {
-                if((drugs.Bacteria == "Klebsiella pneumoniae") && (drugs.Year == year))
-                    {
-                        return true;
-                    }
-                else
-                    {
-                        return false;
-                    }
-            })
-}
-    
-var series1 = stack(kleb(drugs))
 
-console.log(series1)
 
 //Join
-var rectangles = d3.select(target)
-    .select(".graph1")
-    .selectAll("rect")
-    .data(kleb(drugs))
+//rectangles
+    var rectK = groupsK.selectAll("rect")
+        .data(function(entry){return entry})
     
-    //Enter
-    rectangles.enter()
+    //enter
+        rectK.enter()
         .append("rect");
     
-    //Exit
-    rectangles.exit()
-        .remove();
+    //exit
+        rectK.exit()
+            .remove();
     
     //Update
-    
     //reselect
-    d3.select(target)
-        .select(".graph1")
-        .selectAll("rect")
+    
+    groupsK.selectAll("rect")
         .transition()
         .duration(dur)
         .attr("x",function(entry)
         {
-            return xScale(entry.Antibiotic);
+            console.log(entry);
+            return xScale(entry.data.Antibiotic);
         })
         .attr("y",function(entry)
               {
-            return yScale(entry.PercentResistant);    
+            return yScale(entry[1]);    
         })
         .attr("width",70)
-        .attr("height",function(drugs) 
+        .attr("height",function(entry) 
         { 
-            return lengths.graph.height - (yScale(drugs.PercentResistant));
+            return yScale(entry[0])-yScale(entry[1]);
         })
         .attr("rx",2)
         .attr("ry",2)
         .attr("fill","deeppink")
         .attr("stroke","black");
     
-//E coli data
-//Join
-var rectangles = d3.select(target)
-    .select(".graph2")
-    .selectAll("rect")
-    .data(drugs.filter(function(drugs)
-            {
-                if((drugs.Bacteria == "Escherichia coli") && (drugs.Year == year))
-                    {
-                        return true;
-                    }
-                else
-                    {
-                        return false;
-                    }
-            }))
     
-    //Enter
-    rectangles.enter()
+    
+    
+    
+    
+    
+//E coli data
+    
+//Join
+//rectangles
+    var rectE = groupsE.selectAll("rect")
+        .data(function(entry){return entry})
+    
+    //enter
+        rectE.enter()
         .append("rect");
     
-    //Exit
-    rectangles.exit()
-        .remove();
+    //exit
+        rectE.exit()
+            .remove();
     
     //Update
-    
     //reselect
-    d3.select(target)
-        .select(".graph2")
-        .selectAll("rect")
+    
+    groupsE.selectAll("rect")
         .transition()
         .duration(dur)
         .attr("x",function(entry)
         {
-            return xScale(entry.Antibiotic);
+            console.log(entry);
+            return xScale(entry.data.Antibiotic);
         })
         .attr("y",function(entry)
               {
-            return yScale(entry.PercentResistant);    
+            return yScale(entry[1]);    
         })
         .attr("width",70)
-        .attr("height",function(drugs) 
+        .attr("height",function(entry) 
         { 
-            return lengths.graph.height - (yScale(drugs.PercentResistant));
+            return yScale(entry[0])-yScale(entry[1]);
         })
         .attr("rx",2)
         .attr("ry",2)
         .attr("fill","blue")
         .attr("stroke","black");
     
+    
+    
 //Proteus data
 //Join
-var rectangles = d3.select(target)
-    .select(".graph3")
-    .selectAll("rect")
-    .data(drugs.filter(function(drugs)
-            {
-                if((drugs.Bacteria == "Proteus mirabilis") && (drugs.Year == year))
-                    {
-                        return true;
-                    }
-                else
-                    {
-                        return false;
-                    }
-            }))
+//rectangles
+var rectP = groupsP.selectAll("rect")
+        .data(function(entry){return entry})
     
-    //Enter
-    rectangles.enter()
+    //enter
+        rectP.enter()
         .append("rect");
     
-    //Exit
-    rectangles.exit()
-        .remove();
+    //exit
+        rectP.exit()
+            .remove();
     
     //Update
-    
     //reselect
-    d3.select(target)
-        .select(".graph3")
-        .selectAll("rect")
+    
+    groupsP.selectAll("rect")
         .transition()
         .duration(dur)
         .attr("x",function(entry)
         {
-            return xScale(entry.Antibiotic);
+            console.log(entry);
+            return xScale(entry.data.Antibiotic);
         })
         .attr("y",function(entry)
               {
-            return yScale(entry.PercentResistant);    
+            return yScale(entry[1]);    
         })
         .attr("width",70)
-        .attr("height",function(drugs) 
+        .attr("height",function(entry) 
         { 
-            return lengths.graph.height - (yScale(drugs.PercentResistant));
+            return yScale(entry[0])-yScale(entry[1]);
         })
         .attr("rx",2)
         .attr("ry",2)
@@ -423,18 +585,18 @@ var createLabels = function(target,lengths,drugs,year)
 
 var updateTitleYear = function(target,lengths,drugs,year)
 {
-    //d3.selectAll("#title")
-     //   .remove()
+    d3.selectAll("#title")
+        .remove()
     
     d3.select("#title")
-        //.append("text")
-        //.attr("id","title")
+        .append("text")
+        .attr("id","title")
         .text("Antibiotic Resistance in "+year)
-        //.classed("title",true)
-        //.attr("text-anchor","middle")
-        //.attr("x",lengths.margins.left+(lengths.graph.width/2))
-        //.attr("y",lengths.margins.top+5)
-        //.transition().duration(dur);
+        .classed("title",true)
+        .attr("text-anchor","middle")
+        .attr("x",lengths.margins.left+(lengths.graph.width/2))
+        .attr("y",lengths.margins.top+5)
+        .transition().duration(dur);
 }
     
 

@@ -1,0 +1,76 @@
+Bacteria,Antibiotic,Year,PercentResistant,PercentIntermediate,PercentSensitive,NumberResistant,NumberIntermediate,NumberSensitive,NumberTotal
+Klebsiella pneumoniae,Cefuroxime,2018,17.6,38.1,44.3,9694,20924,24311,54929
+Klebsiella pneumoniae,Amoxicillin/clavulanic acid,2018,23.6,20.7,55.7,7396,6470,17443,31309
+Klebsiella pneumoniae,Ampicillin/sulbactam,2018,25.3,21.5,53.1,13051,11103,27380,51534
+Klebsiella pneumoniae,Doxycycline,2018,37.1,2.5,60.5,2782,185,4537,7504
+Klebsiella pneumoniae,Ampicillin,2018,100,0,0,46894,15,7,46916
+Klebsiella pneumoniae,Cefuroxime,2017,18.9,35.3,45.8,9297,17381,22571,49249
+Klebsiella pneumoniae,Amoxicillin/clavulanic acid,2017,24.6,23,52.4,5698,5334,12156,23188
+Klebsiella pneumoniae,Ampicillin/sulbactam,2017,26.2,25.5,48.3,11862,11572,21926,45360
+Klebsiella pneumoniae,Doxycycline,2017,40.1,3.6,56.3,1549,140,2173,3862
+Klebsiella pneumoniae,Ampicillin,2017,99.9,0,0,41056,18,17,41091
+Klebsiella pneumoniae,Cefuroxime,2016,18.9,20.9,60.2,7530,8324,24018,39872
+Klebsiella pneumoniae,Amoxicillin/clavulanic acid,2016,23.2,9.3,67.5,4417,1773,12861,19051
+Klebsiella pneumoniae,Ampicillin/sulbactam,2016,25.2,12.2,62.6,10122,4876,25128,40126
+Klebsiella pneumoniae,Doxycycline,2016,23.3,3.5,73.3,1196,178,3765,5139
+Klebsiella pneumoniae,Ampicillin,2016,99.8,0.1,0,32931,45,13,32989
+Klebsiella pneumoniae,Cefuroxime,2015,18.8,4.8,76.4,6138,1579,25003,32720
+Klebsiella pneumoniae,Amoxicillin/clavulanic acid,2015,21.4,3.5,75.2,2370,386,8340,11096
+Klebsiella pneumoniae,Ampicillin/sulbactam,2015,23.9,2.8,73.3,8321,965,25530,34816
+Klebsiella pneumoniae,Doxycycline,2015,22.2,3,74.8,1000,134,3367,4501
+Klebsiella pneumoniae,Ampicillin,2015,100,0,0,27827,1,11,27839
+Klebsiella pneumoniae,Cefuroxime,2014,19,2.7,78.3,4038,584,16661,21283
+Klebsiella pneumoniae,Amoxicillin/clavulanic acid,2014,25.5,0.7,73.8,1922,49,5564,7535
+Klebsiella pneumoniae,Ampicillin/sulbactam,2014,25.5,0.7,73.8,5158,142,14895,20195
+Klebsiella pneumoniae,Doxycycline,2014,29.6,4.3,66.1,179,26,399,604
+Klebsiella pneumoniae,Ampicillin,2014,100,0,0,15852,0,4,15856
+Escherichia coli,Cefuroxime,2018,17.2,36.5,46.3,41367,88087,111660,241114
+Escherichia coli,Amoxicillin/clavulanic acid,2018,37.5,16.6,45.9,55046,24419,67400,146865
+Escherichia coli,Ampicillin/sulbactam,2018,38.7,17.2,44.1,87577,39013,99805,226395
+Escherichia coli,Doxycycline,2018,44.2,0.6,55.2,13965,199,17427,31591
+Escherichia coli,Ampicillin,2018,48.7,17.8,33.5,100446,36656,69186,206288
+Escherichia coli,Cefuroxime,2017,17.1,34,48.9,38623,76609,110089,225321
+Escherichia coli,Amoxicillin/clavulanic acid,2017,37.3,17.7,45,41201,19611,49714,110526
+Escherichia coli,Ampicillin/sulbactam,2017,38.5,21.3,40.2,81065,44774,84689,210528
+Escherichia coli,Doxycycline,2017,47,0.7,52.4,7746,110,8640,16496
+Escherichia coli,Ampicillin,2017,48.4,18.8,32.8,91529,35471,62053,189053
+Escherichia coli,Cefuroxime,2016,17,21.3,61.7,29903,37420,108396,175719
+Escherichia coli,Amoxicillin/clavulanic acid,2016,35.9,7.2,56.9,29395,5884,46517,81796
+Escherichia coli,Ampicillin/sulbactam,2016,37.6,10.9,51.5,67418,19633,92420,179471
+Escherichia coli,Doxycycline,2016,31.9,0.9,67.2,6297,169,13258,19724
+Escherichia coli,Ampicillin,2016,48.5,8.6,42.8,71364,12669,62965,146998
+Escherichia coli,Cefuroxime,2015,16.1,2.9,81,24264,4303,121705,150272
+Escherichia coli,Amoxicillin/clavulanic acid,2015,31.6,3.1,65.3,15980,1573,33069,50622
+Escherichia coli,Ampicillin/sulbactam,2015,36.1,5.2,58.7,58400,8359,94887,161646
+Escherichia coli,Doxycycline,2015,31.6,0.5,67.8,6024,104,12922,19050
+Escherichia coli,Ampicillin,2015,48.7,0.7,50.5,62344,956,64703,128003
+Escherichia coli,Cefuroxime,2014,16.5,0.9,82.6,17112,931,85843,103886
+Escherichia coli,Amoxicillin/clavulanic acid,2014,37.7,1.1,61.3,13550,392,22039,35981
+Escherichia coli,Ampicillin/sulbactam,2014,40.1,1,58.9,40201,996,59030,100227
+Escherichia coli,Doxycycline,2014,31.7,0.4,68,808,9,1733,2550
+Escherichia coli,Ampicillin,2014,49.3,0.6,50.1,38893,450,39579,78922
+Proteus mirabilis,Cefuroxime,2018,3.1,44.2,52.7,1604,22636,27000,51240
+Proteus mirabilis,Amoxicillin/clavulanic acid,2018,10.9,23.9,65.2,3126,6845,18700,28671
+Proteus mirabilis,Ampicillin/sulbactam,2018,11.4,23.2,65.3,5528,11242,31598,48368
+Proteus mirabilis,Doxycycline,2018,99.8,0,0.2,8798,1,14,8813
+Proteus mirabilis,Ampicillin,2018,30.9,23.8,45.3,13381,10318,19594,43293
+Proteus mirabilis,Cefuroxime,2017,3.1,40.3,56.6,1438,18895,26564,46897
+Proteus mirabilis,Amoxicillin/clavulanic acid,2017,11.5,26.2,62.3,2502,5697,13522,21721
+Proteus mirabilis,Ampicillin/sulbactam,2017,12.1,27.9,59.9,5313,12222,26212,43747
+Proteus mirabilis,Doxycycline,2017,99.8,0,0.2,5800,0,14,5814
+Proteus mirabilis,Ampicillin,2017,31.1,25.1,43.8,12161,9810,17143,39114
+Proteus mirabilis,Cefuroxime,2016,4,25.2,70.8,1374,8670,24350,34394
+Proteus mirabilis,Amoxicillin/clavulanic acid,2016,10.1,9.7,80.2,1545,1479,12283,15307
+Proteus mirabilis,Ampicillin/sulbactam,2016,11.3,13,75.7,3995,4623,26880,35498
+Proteus mirabilis,Doxycycline,2016,99.4,0.1,0.5,5599,3,30,5632
+Proteus mirabilis,Ampicillin,2016,31.3,11.9,56.8,9113,3461,16553,29127
+Proteus mirabilis,Cefuroxime,2015,3.7,1,95.3,1091,294,27797,95.3
+Proteus mirabilis,Amoxicillin/clavulanic acid,2015,8.4,1,90.6,774,90,8319,9183
+Proteus mirabilis,Ampicillin/sulbactam,2015,10.3,1.9,87.8,3282,600,28042,31924
+Proteus mirabilis,Doxycycline,2015,99.6,0,0.4,5516,1,20,5537
+Proteus mirabilis,Ampicillin,2015,32,0.7,67.2,8205,191,17240,25636
+Proteus mirabilis,Cefuroxime,2014,3.2,0.3,96.5,640,62,19192,19894
+Proteus mirabilis,Amoxicillin/clavulanic acid,2014,11.3,0.3,88.4,701,19,5484,88.4
+Proteus mirabilis,Ampicillin/sulbactam,2014,11.3,0.5,88.3,2152,88,16866,19106
+Proteus mirabilis,Doxycycline,2014,99,0,1,1446,0,14,1460
+Proteus mirabilis,Ampicillin,2014,30.3,0.5,69.2,4786,84,10951,15821

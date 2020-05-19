@@ -1,0 +1,286 @@
+<html>
+    <body>
+    <div>
+    <button id="Kp">Klebsiella pneumoniae</button>
+    <button id="Ec">Escherichia coli</button>
+    <button id="Pm">Proteus mirabilis</button>
+    </div>
+    <svg id="plot"></svg>
+    
+    </body>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script>
+    
+var dur = 1000
+
+var recalculateScales = function(drugs,lengths)
+{
+    var xScale = d3.scaleBand()
+        .domain(function(entry)
+                {return entry.Antibiotic;})
+        .range([0,lengths.graph.width])
+        .paddingInner(.5)
+    
+    var yScale = d3.scaleLinear()
+        .domain([0,
+                d3.max(drugs,function(entry)
+                       { return entry.NumberResistant; })
+                ])
+        .range([lengths.graph.height,0])
+    
+    return { xScale:xScale,yScale:yScale}
+}
+
+var updateGraph = function(drugs,target,lengths,xScale,yScale,yProp)
+{
+    
+    //the size of the screen
+    var screen = {width:500, height:400};
+    
+    //how much space will be on each side of the graph
+    var margins = {top:15,bottom:40,left:70,right:15};
+    
+    //generated how much space the graph will take up
+    var graph = 
+    {
+        width:screen.width-margins.left-margins.right,
+        height:screen.height-margins.top-margins.bottom,
+    }
+    
+    var lengths = {
+        screen:screen,
+        margins:margins,
+        graph:graph
+    }
+
+    var scales = recalculateScales(drugs,lengths);
+    var xScale = scales.xScale;
+    var yScale = scales.yScale;
+    
+    console.log("Updating graph.");
+    
+    updateAxes(target,xScale,yScale);
+    
+    updateBanner(drugs.Year)
+    
+    
+    //Join
+    var rectangles = d3.select(target)
+        .select(".graph")
+        .selectAll("rect")
+        .data(drugs, function(entry){return entry.NumberResistant;})
+    
+    //Enter
+    rectangles.enter()
+        .append("rect");
+    
+    //Exit
+    rectangles.exit()
+        .remove();
+    
+    //Update
+    
+    //reselect
+    d3.select(target)
+        .select(".graph")
+        .selectAll("rect")
+        .transition()
+        .duration(dur)
+        .attr("x",function(entry)
+        {
+            return xScale(entry.Antibiotic);
+        })
+        .attr("y",function(student)
+              {
+            return yScale((drugs[yProp]));    
+        })
+        .attr("width",70)
+        .attr("height",function(drugs) 
+        { 
+            return lengths.graph.height - yScale((drugs[yProp]));
+        })
+        .attr("rx",2)
+        .attr("ry",2)
+        .attr("fill","deeppink")
+        .attr("stroke","black");
+}
+
+
+var updateBanner = function(drugs)
+{
+    d3.select("#title")
+        .text("Antibiotic Resistance in " +drugs);
+}
+
+
+var createLabels = function(lengths,target)
+{
+    var labels = d3.select(target)
+        .append("g")
+        .classed("labels",true)
+
+    labels.append("text")
+        .attr("id","title")
+        .text("Antibiotic Resistance in OOOO")
+        .classed("title",true)
+        .attr("text-anchor","middle")
+        .attr("x",lengths.margins.left+(lengths.graph.width/2))
+        .attr("y",lengths.margins.top-5)
+    
+    labels.append("g")
+        .attr("transform","translate(20,"+ 
+              (lengths.margins.top+(lengths.graph.height/2))+")")
+        .append("text")
+        .text("Antibiotics")
+        .classed("label",true)
+        .attr("text-anchor","middle")
+        .attr("transform","rotate(90)")  
+}
+
+
+var initAxes = function(lengths,target)
+{    
+    var axes = d3.select(target)
+        .append("g")
+        .classed("class","axis")
+    
+    axes.append("g")
+        .attr("id","xAxis")
+        .attr("transform","translate("+lengths.margins.left+","
+             +(lengths.margins.top+lengths.graph.height)+")")
+    
+    axes.append("g")
+        .attr("id","yAxis")
+        .attr("transform","translate("+lengths.margins.left+","
+             +(lengths.margins.top)+")")
+}
+
+var updateAxes = function(target,xScale,yScale)
+{
+   var xAxis = d3.axisBottom(xScale);
+    var yAxis = d3.axisLeft(yScale); 
+    
+    d3.select("#xAxis")
+        .transition()
+        .duration(dur)
+        .call(xAxis)
+    
+    d3.select("#yAxis")
+        .transition()
+        .duration(dur)
+        .call(yAxis)
+}
+
+var initButtons = function(target,drugs,index,length)
+{
+    //the size of the screen
+    var screen = {width:500, height:400};
+    
+    //how much space will be on each side of the graph
+    var margins = {top:15,bottom:40,left:70,right:15};
+    
+    //generated how much space the graph will take up
+    var graph = 
+    {
+        width:screen.width-margins.left-margins.right,
+        height:screen.height-margins.top-margins.bottom,
+    }
+    
+    var lengths = {
+        screen:screen,
+        margins:margins,
+        graph:graph
+    }
+
+    
+    
+    d3.select("#fvh")
+    .on("click",function()
+    {
+        var yScale = d3.scaleLinear()
+        .domain([0,50])
+        .range([345,0]);
+        
+        updateGraph(students,target,length,xScale,yScale,"final","homework");
+    })
+    
+    d3.select("#Kp")
+    .on("click",function()
+    {
+        var yScale = d3.scaleLinear()
+        .domain([0,50])
+        .range([345,0]);
+        
+        updateGraph(students,target,length,xScale,yScale,"final","homework");
+    })
+    
+    d3.select("#previous")
+    .on("click",function()
+    {
+        if(index>=0)
+        {
+            updateGraph(target,drugs[index-1],lengths);    
+            initButtons(target,drugs,index-1,lengths);
+        }
+    })
+    
+}
+
+var initGraph = function(target,drugs)
+{
+    //the size of the screen
+    var screen = {width:3000, height:400};
+    
+    //how much space will be on each side of the graph
+    var margins = {top:15,bottom:40,left:70,right:15};
+    
+    //generated how much space the graph will take up
+    var graph = 
+    {
+        width:screen.width-margins.left-margins.right,
+        height:screen.height-margins.top-margins.bottom,
+    }
+    
+    var lengths = {
+        screen:screen,
+        margins:margins,
+        graph:graph
+    }
+
+    //set the screen size
+    d3.select(target)
+        .attr("width",screen.width)
+        .attr("height",screen.height)
+    
+    //create a group for the graph
+    var g = d3.select(target)
+        .append("g")
+        .classed("graph",true)
+        .attr("transform","translate("+margins.left+","+
+             margins.top+")");
+         
+    initAxes(lengths,target);
+    
+    initButtons(target,drugs,0,length);
+
+    updateGraph(drugs,target,lengths,xScale,yScale,yProp);
+}
+
+
+
+var drugPromise = d3.csv("bacteriaData.csv");
+
+drugPromise.then(function(drugs)
+{
+    console.log("antibiotic data",drugs);
+   initGraph("#plot",drugs);
+   
+},
+function(err)
+{
+   console.log("Error Loading data:",err);
+});
+
+    
+    </script>
+</html>

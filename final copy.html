@@ -1,0 +1,440 @@
+<html>
+    <body>
+    <div>
+    <button id="four">2014</button>
+    <button id="five">2015</button>
+    <button id="six">2016</button>
+    <button id="seven">2017</button>
+    <button id="eight">2018</button>
+    </div>
+    <svg id="plot"></svg>
+    
+    </body>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script>
+    
+var dur = 1000
+
+var initAxes = function(lengths,target)
+{
+    var axes = d3.select(target)
+        .select(".graph1")
+        .append("g")
+        .classed("class","axis")
+    
+    axes.append("g")
+        .attr("id","xAxis")
+        .attr("transform","translate(0,"
+             +(lengths.graph.height)+")")
+    
+    axes.append("g")
+        .attr("id","yAxis")
+    
+    var x2 = d3.select(target)
+        .select(".graph2")
+        .append("g")
+        .classed("class","axis")
+    
+    x2.append("g")
+        .attr("id","xAxis2")
+        .attr("transform","translate(0,"
+             +(lengths.graph.height)+")")
+    
+}
+
+var updateAxes = function(target,xScale,yScale)
+{
+    
+    var xAxis = d3.axisBottom(xScale);
+    var yAxis = d3.axisLeft(yScale); 
+    //var xAxis2 = d3.axisBottom(xScale);
+    
+    d3.select("#xAxis")
+        .transition()
+        .duration(dur)
+        .call(xAxis)
+    
+    d3.select("#yAxis")
+        .transition()
+        .duration(dur)
+        .call(yAxis)
+    
+    d3.select("xAxis2")
+        .transition()
+        .duration(dur)
+        .call(xAxis)
+        
+}
+
+
+var initButtons = function(target,drugs,lengths,year)
+{
+ 
+    d3.select("#four")
+    .on("click",function()
+    {
+        
+        updateGraph(drugs,target,lengths,2014);
+    })
+    
+    d3.select("#five")
+    .on("click",function()
+    {
+        
+        updateGraph(drugs,target,lengths,2015);
+    })
+    
+    d3.select("#six")
+    .on("click",function()
+    {
+         updateGraph(drugs,target,lengths,2016);
+        
+    })
+    
+    d3.select("#seven")
+    .on("click",function()
+    {
+         updateGraph(drugs,target,lengths,2017);
+        
+    })
+    
+    d3.select("#eight")
+    .on("click",function()
+    {
+         updateGraph(drugs,target,lengths,2018);
+        
+    })
+    
+}
+
+
+var initGraph = function(target,drugs,year)
+{
+    //the size of the screen
+    var screen = {width:3000, height:400};
+    
+    //how much space will be on each side of the graph
+    var margins = {top:15,bottom:40,left:100,right:15};
+    
+    //generated how much space the graph will take up
+    var graph = 
+    {
+        width:screen.width-margins.left-margins.right,
+        height:screen.height-margins.top-margins.bottom,
+    }
+    
+    var lengths = {
+        screen:screen,
+        margins:margins,
+        graph:graph
+    }
+
+    //set the screen size
+    d3.select(target)
+        .attr("width",screen.width)
+        .attr("height",screen.height)
+    
+    //create a group for the graph
+    var g1 = d3.select(target)
+        .append("g")
+        .classed("graph1",true)
+        .attr("transform","translate("+margins.left+","+
+             margins.top+")");
+    
+    var g2 = d3.select(target)
+        .append("g")
+        .classed("graph2",true)
+        .attr("transform","translate(600,"+
+             margins.top+")");
+    
+    var g3 = d3.select(target)
+        .append("g")
+        .classed("graph3",true)
+        .attr("transform","translate(1140,"+
+             margins.top+")");
+    
+    
+    updateGraph(drugs,target,lengths,year);
+    initAxes(lengths,target);
+         
+};
+    
+     
+
+var updateGraph = function(drugs,target,lengths,year)
+{
+    
+    //the size of the screen
+    var screen = {width:500, height:400};
+    
+    //how much space will be on each side of the graph
+    var margins = {top:15,bottom:40,left:70,right:15};
+    
+    //generated how much space the graph will take up
+    var graph = 
+    {
+        width:screen.width-margins.left-margins.right,
+        height:screen.height-margins.top-margins.bottom,
+    }
+    
+    var lengths = {
+        screen:screen,
+        margins:margins,
+        graph:graph
+    };
+    
+
+    var xScale = d3.scaleBand()
+        .domain(drugs.map(function(entry)
+                {return entry.Antibiotic;}))
+        .range([0,lengths.graph.width])
+        .paddingInner(.2);
+    
+    var yScale = d3.scaleLinear()
+        .domain([0,40000])
+        .range([lengths.graph.height,0]);
+    
+    
+    console.log("Updating graph.");
+    
+    createLabels(target,lengths,drugs,year);
+    
+    updateTitleYear(target,lengths,drugs,year);
+    
+    updateAxes(target,xScale,yScale);
+    
+    initButtons(target,drugs,lengths,year);
+    
+//Klebsiella data
+    
+var stack = d3.stack()
+    .keys(["NumberResistant","NumberIntermediate","NumberSensitive"]);
+ 
+var kleb = function(drugs)
+{
+    return drugs.filter(function(drugs)
+            {
+                if((drugs.Bacteria == "Klebsiella pneumoniae") && (drugs.Year == year))
+                    {
+                        return true;
+                    }
+                else
+                    {
+                        return false;
+                    }
+            })
+}
+    
+var series1 = stack(kleb)
+
+//Join
+var rectangles = d3.select(target)
+    .select(".graph1")
+    .selectAll("rect")
+    .data(kleb)
+    
+    //Enter
+    rectangles.enter()
+        .append("rect");
+    
+    //Exit
+    rectangles.exit()
+        .remove();
+    
+    //Update
+    
+    //reselect
+    d3.select(target)
+        .select(".graph1")
+        .selectAll("rect")
+        .transition()
+        .duration(dur)
+        .attr("x",function(entry)
+        {
+            return xScale(entry.Antibiotic);
+        })
+        .attr("y",function(entry)
+              {
+            return yScale(entry.NumberResistant);    
+        })
+        .attr("width",70)
+        .attr("height",function(drugs) 
+        { 
+            return lengths.graph.height - (yScale(drugs.NumberResistant));
+        })
+        .attr("rx",2)
+        .attr("ry",2)
+        .attr("fill","deeppink")
+        .attr("stroke","black");
+    
+//E coli data
+//Join
+var rectangles = d3.select(target)
+    .select(".graph2")
+    .selectAll("rect")
+    .data(drugs.filter(function(drugs)
+            {
+                if((drugs.Bacteria == "Escherichia coli") && (drugs.Year == year))
+                    {
+                        return true;
+                    }
+                else
+                    {
+                        return false;
+                    }
+            }))
+    
+    //Enter
+    rectangles.enter()
+        .append("rect");
+    
+    //Exit
+    rectangles.exit()
+        .remove();
+    
+    //Update
+    
+    //reselect
+    d3.select(target)
+        .select(".graph2")
+        .selectAll("rect")
+        .transition()
+        .duration(dur)
+        .attr("x",function(entry)
+        {
+            return xScale(entry.Antibiotic);
+        })
+        .attr("y",function(entry)
+              {
+            return yScale(entry.NumberResistant);    
+        })
+        .attr("width",70)
+        .attr("height",function(drugs) 
+        { 
+            return lengths.graph.height - (yScale(drugs.NumberResistant));
+        })
+        .attr("rx",2)
+        .attr("ry",2)
+        .attr("fill","blue")
+        .attr("stroke","black");
+    
+//Proteus data
+//Join
+var rectangles = d3.select(target)
+    .select(".graph3")
+    .selectAll("rect")
+    .data(drugs.filter(function(drugs)
+            {
+                if((drugs.Bacteria == "Proteus mirabilis") && (drugs.Year == year))
+                    {
+                        return true;
+                    }
+                else
+                    {
+                        return false;
+                    }
+            }))
+    
+    //Enter
+    rectangles.enter()
+        .append("rect");
+    
+    //Exit
+    rectangles.exit()
+        .remove();
+    
+    //Update
+    
+    //reselect
+    d3.select(target)
+        .select(".graph3")
+        .selectAll("rect")
+        .transition()
+        .duration(dur)
+        .attr("x",function(entry)
+        {
+            return xScale(entry.Antibiotic);
+        })
+        .attr("y",function(entry)
+              {
+            return yScale(entry.NumberResistant);    
+        })
+        .attr("width",70)
+        .attr("height",function(drugs) 
+        { 
+            return lengths.graph.height - (yScale(drugs.NumberResistant));
+        })
+        .attr("rx",2)
+        .attr("ry",2)
+        .attr("fill","green")
+        .attr("stroke","black");
+    
+}
+
+
+
+var createLabels = function(target,lengths,drugs,year)
+{
+   var labels = d3.select(target)
+        .append("g")
+        .classed("labels",true)
+
+    labels.append("text")
+        .attr("id","title")
+        .text("Antibiotic Resistance in 2014")
+        .classed("title",true)
+        .attr("text-anchor","middle")
+        .attr("x",lengths.margins.left+(lengths.graph.width/2))
+        .attr("y",lengths.margins.top+5)
+    
+    labels.append("g")
+        .attr("transform","translate(20,"+ 
+              (lengths.margins.top+(lengths.graph.height/2))+")")
+        .append("text")
+        .text("Number of Cases")
+        .classed("label",true)
+        .attr("text-anchor","middle")
+        .attr("transform","rotate(90)")
+        
+    labels.append("g")
+        .attr("transform","translate(285,"+ 
+              (lengths.margins.top+(lengths.graph.height)+(lengths.margins.bottom-5)+")"))
+        .append("text")
+        .text("Antibiotic")
+        .classed("label",true)
+        .attr("text-anchor","middle") 
+}
+
+var updateTitleYear = function(target,lengths,drugs,year)
+{
+    d3.select("#title")
+        .exit().remove()
+    
+    d3.select(".labels")
+        .append("text")
+        .attr("id","title")
+        .text("Antibiotic Resistance in "+year)
+        .classed("title",true)
+        .attr("text-anchor","middle")
+        .attr("x",lengths.margins.left+(lengths.graph.width/2))
+        .attr("y",lengths.margins.top+5)
+        .transition().duration(dur);
+}
+    
+
+var drugPromise = d3.csv("bacteriaData.csv");
+
+drugPromise.then(function(drugs)
+{
+    console.log("antibiotic data",drugs);
+   initGraph("#plot",drugs,2014);
+   
+},
+function(err)
+{
+   console.log("Error Loading data:",err);
+});
+
+
+</script>
+</html>
